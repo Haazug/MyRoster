@@ -1,5 +1,13 @@
 // en, pt, it, fr, es. Keep every interface key complete across the five supported languages.
 export const interfaceText: Record<string, readonly [string,string,string,string,string]> = {
+ "booking.title":["Book this flight", "Reservar este voo", "Prenota questo volo", "Réserver ce vol", "Reservar este vuelo"],
+ "booking.question":["How do you want to save it?", "Como queres guardar este voo?", "Come vuoi salvarlo?", "Comment souhaitez-vous l’enregistrer ?", "¿Cómo quieres guardarlo?"],
+ "booking.plan":["Prepare the flight plan now", "Preparar o plano de voo agora", "Prepara ora il piano di volo", "Préparer le plan de vol maintenant", "Preparar el plan de vuelo ahora"],
+ "booking.planHint":["Complete the plan and generate your boarding pass. Use it when you fly.", "Preenche o plano e gera o cartão de embarque. Usa-o quando fores voar.", "Completa il piano e genera la carta d’imbarco. Usala quando voli.", "Complétez le plan et générez votre carte d’embarquement. Utilisez-la au départ.", "Completa el plan y genera tu tarjeta de embarque. Úsala cuando vueles."],
+ "booking.route":["Save the route only", "Guardar apenas a rota", "Salva solo la rotta", "Enregistrer uniquement l’itinéraire", "Guardar solo la ruta"],
+ "booking.routeHint":["Plan it later, when you are ready to fly.", "Prepara o plano mais tarde, quando quiseres voar.", "Pianifica più tardi, quando vuoi volare.", "Préparez le plan plus tard, quand vous voudrez voler.", "Prepara el plan más tarde, cuando quieras volar."],
+ "booking.close":["Close", "Fechar", "Chiudi", "Fermer", "Cerrar"],
+
  'handoff.endOld':['This flight has already ended','Este voo já terminou','Questo volo è già terminato','Ce vol est déjà terminé','Este vuelo ya terminó'],
  'handoff.closed':['Flight closed on all devices','Voo encerrado em todos os dispositivos','Volo chiuso su tutti i dispositivi','Vol fermé sur tous les appareils','Vuelo cerrado en todos los dispositivos'],
  "special.original":["Original aircraft","Aeronave original","Aereo originale","Avion d’origine","Avión original"],

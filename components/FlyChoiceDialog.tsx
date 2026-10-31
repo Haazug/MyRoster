@@ -1,5 +1,6 @@
 'use client'
 
+import DialogSheet from '@/components/DialogSheet'
 import { toast } from 'sonner'
 import { Map, Plane, SlidersHorizontal, Download, X } from 'lucide-react'
 import { copyText, downloadPln, flightSummary, simbriefUrl, type ExportFlight } from '@/lib/export'
@@ -32,8 +33,7 @@ const OPTIONS: { kind: FlyKind; icon: any; title: string; text: string; primary?
 export default function FlyChoiceDialog({ open, onClose, onPick }: { open: boolean; onClose: () => void; onPick: (kind: FlyKind) => void }) {
   if (!open) return null
   return (
-    <div className="fixed inset-0 z-[70] flex items-end justify-center bg-black/70 p-4 backdrop-blur-sm sm:items-center" onClick={onClose}>
-      <div role="dialog" aria-label="Plan your flight" onClick={(e) => e.stopPropagation()} className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl border border-white/10 bg-[#111217] p-5 text-white shadow-2xl">
+    <DialogSheet open={open} onClose={onClose} label="Plan your flight">
         <div className="flex items-start justify-between">
           <div>
             <h2 className="text-xl font-semibold">Plan your flight</h2>
@@ -51,7 +51,6 @@ export default function FlyChoiceDialog({ open, onClose, onPick }: { open: boole
             <p className={`mt-1 text-sm ${o.primary ? 'text-white/80' : 'text-white/60'}`}>{o.text}</p>
           </button>
         ))}
-      </div>
-    </div>
+    </DialogSheet>
   )
 }
