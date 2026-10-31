@@ -216,7 +216,7 @@ nav[class*="fixed"] { background: rgba(10,10,10,.8) !important; border-color: rg
 .dialog-sheet {
   position: fixed;
   inset: 0;
-  margin: auto auto max(12px, env(safe-area-inset-bottom));
+  margin: auto;
   width: min(28rem, calc(100% - 24px));
   max-width: none;
   max-height: calc(100dvh - max(12px, env(safe-area-inset-top)) - max(12px, env(safe-area-inset-bottom)));
@@ -231,4 +231,3 @@ nav[class*="fixed"] { background: rgba(10,10,10,.8) !important; border-color: rg
 }
 .dialog-sheet::backdrop { background: rgb(0 0 0 / .7); backdrop-filter: blur(8px); }
 .dialog-sheet button { border-radius: 16px; }
-@media (min-width: 640px) { .dialog-sheet { margin: auto; } }
