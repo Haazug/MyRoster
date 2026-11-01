@@ -62,5 +62,5 @@ export function calendarEvent(id:string,title:string,at:number,duration:number,u
 // Keep the booking identity and route, but reset the lifecycle and its notification generation.
 export function rescheduleTrip<T extends ScheduledTrip & {plan?:any;departure?:string}>(flight:T,at:number,now=Date.now()):T {
  if(!Number.isFinite(at)||at<=now||hasDeparted(flight)||flight.endedAt||flight.status==='completed')throw new Error('Invalid reschedule')
- return {...flight,scheduledAt:at,departure:new Date(at).toISOString(),status:'scheduled',startedAt:undefined,takeoffAt:null,endedAt:undefined,plan:flight.plan?{...flight.plan,scheduledAt:at}:undefined}
+ return {...flight,scheduledAt:at,departure:new Date(at).toISOString(),status:'scheduled',cancellationReason:undefined,startedAt:undefined,takeoffAt:null,endedAt:undefined,plan:flight.plan?{...flight.plan,scheduledAt:at}:undefined}
 }

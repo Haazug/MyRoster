@@ -1,3 +1,4 @@
+import PushAccountGuard from '@/components/PushAccountGuard'
 import {LEGAL} from '@/lib/legal'
 import GlobeDiscovery from '@/components/GlobeDiscovery'
 import NavigationHistory from '@/components/NavigationHistory'
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <GlobeDiscovery />
         <BottomNav />
         <FlightCompanion />
+        <PushAccountGuard />
          <BackgroundMusic />
         <LanguageGate />
         <PlnDrop />

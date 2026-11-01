@@ -2,7 +2,7 @@
 import {supabase} from '@/lib/supabase'
 function apply(rows:any[],id:string,patch:any,expectedScheduledAt?:number){return rows.map(b=>b.id!==id||(expectedScheduledAt!==undefined&&(b.scheduledAt!==expectedScheduledAt||b.takeoffAt||b.endedAt||b.status==='completed'))?b:{...b,...patch,startedAt:b.startedAt||patch.startedAt})}
 function save(rows:any[]){localStorage.setItem('myroster.bookings',JSON.stringify(rows));window.dispatchEvent(new CustomEvent('myroster:data-changed',{detail:{key:'myroster.bookings'}}))}
-export async function updateTripStatus(id:string,patch:{takeoffAt?:number|null;startedAt?:number;endedAt?:number;status:string},expectedScheduledAt?:number){
+export async function updateTripStatus(id:string,patch:{takeoffAt?:number|null;startedAt?:number;endedAt?:number;status:string;cancellationReason?:string},expectedScheduledAt?:number){
  try{
   const {data:auth}=await supabase.auth.getSession(),uid=auth.session?.user.id
   const local=JSON.parse(localStorage.getItem('myroster.bookings')||'[]')

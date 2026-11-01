@@ -109,7 +109,6 @@ export default function FlightPlanPage() {
     if(launchLock.current)return
     launchLock.current=true;setLaunching(true)
     try {
-    if(scheduledAt&&typeof Notification!=='undefined'&&Notification.permission==='default')void Notification.requestPermission().catch(()=>{})
     const scheduleId=scheduledAt?crypto.randomUUID():undefined
     const {data:session}=await supabase.auth.getSession()
     const plan={...(seed||{}),createdAt:Date.now(),id:String(id),airlineIata:seed?.airlineIata||String(id).split('-')[0].toUpperCase(),flightNumber:flightNumberPart(form.flight,seed?.airlineIata||'',seed?.airlineIcao||''),from:o.from,to:o.to,fromCity:o.fromCity,toCity:o.toCity,aircraft:o.aircraft,altitude:o.fl*100,distanceNm:o.distanceNm,durationMin:o.durationMin,fromLat:o.fromLat,fromLon:o.fromLon,toLat:o.toLat,toLon:o.toLon,waypoints:o.waypoints,scheduledAt,scheduleId,accountId:session.session?.user.id}

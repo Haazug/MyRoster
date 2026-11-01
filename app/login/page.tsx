@@ -1,4 +1,5 @@
 'use client'
+import {clearDevicePush} from '@/lib/push-client'
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -44,6 +45,7 @@ export default function LoginPage() {
   }
 
   const signOut = async () => {
+    await clearDevicePush().catch(()=>{})
     await supabase.auth.signOut()
     setUser(null)
   }

@@ -1,6 +1,7 @@
 'use client'
 import {useEffect,useState} from 'react'
 import {useRouter} from 'next/navigation'
+import {localPushDevice} from '@/lib/push-client'
 import {scheduledEvent} from '@/lib/flight-workflow'
 import {updateTripStatus} from '@/lib/trip-client'
 import {toast} from 'sonner'
@@ -38,13 +39,15 @@ export default function FlightCompanion(){
      const stage=scheduledEvent(b)
      if(!stage)continue
      const key=`myroster.schedule.${uid||'guest'}.${b.id}.${b.scheduledAt}.${stage}`
-     if(stage==='cancelled')await updateTripStatus(b.id,{status:'cancelled'},b.scheduledAt)
+     if(stage==='cancelled')await updateTripStatus(b.id,{status:'cancelled',cancellationReason:'missed-departure'},b.scheduledAt)
+     const push=localPushDevice(),pushActive=push?.userId===(uid||'guest')
+     if(pushActive&&!push!.preferences[stage])continue
      if(localStorage.getItem(key))continue
      if(!live)continue
      localStorage.setItem(key,'1')
      const title=t(stage==='due'?'schedule.due':`schedule.${stage}`),body=`${b.flightNumber||''} ${b.orig} → ${b.dest}`
      toast(title,{description:body,duration:15000,action:{label:t('trip.open'),onClick:()=>router.push('/trips')}})
-     try{if(typeof Notification!=='undefined'&&Notification.permission==='granted')new Notification(title,{body,tag:key,icon:'/favicon.ico'})}catch{}
+     try{if(!pushActive&&typeof Notification!=='undefined'&&Notification.permission==='granted')new Notification(title,{body,tag:key,icon:'/favicon.ico'})}catch{}
     }
    }finally{checking=false}
   }

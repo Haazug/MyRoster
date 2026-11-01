@@ -1,3 +1,12 @@
+## v2.2.5 — 2026-11-01
+
+- Add optional Web Push for scheduled flights with per-device alert preferences, native permission prompts and a test notification.
+- Add authenticated subscription endpoints, VAPID sending, a push-only service worker, account isolation and sign-out cleanup.
+- Add server dispatch with current-booking validation, database delivery leases, retry handling, expired-subscription cleanup and scheduler health status.
+- Add a service-only Supabase migration and a separate Vault/pg_cron scheduler script; production credentials and activation remain operator setup.
+- Explain iPhone/iPad Home Screen requirements, denied permissions and delivery limits in all five interface languages.
+- Preserve v2.2.4 features and replace the old profile version label with the current release. See `docs/v2.2.5.md` for activation.
+
 ## v2.2.4 — 2026-11-01
 
 - Correct scheduled preflight detection and persist cancellation after three hours without takeoff; guard stale automatic schedule updates.

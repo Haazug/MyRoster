@@ -1,5 +1,8 @@
 'use client'
 
+import PushSettings from '@/components/PushSettings'
+import {APP_VERSION} from '@/lib/release'
+import {clearDevicePush} from '@/lib/push-client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Camera, Copy, Users, LogOut, LogIn, Lock } from 'lucide-react'
@@ -117,6 +120,7 @@ export default function ProfilePage() {
   const handleLogout = async () => {
     if (!window.confirm('Terminar sessão?')) return
     try {
+      await clearDevicePush().catch(()=>{})
       await supabase.auth.signOut()
       localStorage.removeItem('myroster.profile')
       localStorage.removeItem('myroster.friends')
@@ -427,7 +431,8 @@ export default function ProfilePage() {
           </div>
         )}
       </div>
-      <div id="settings" className="mt-8 scroll-mt-16 border-t border-white/10 py-6"><h2 className="text-xl font-semibold">{t('settings.title')}</h2><p className="mt-2 font-mono text-xs text-white/35">MyRoster · v2.2.3 (bug fix 1)</p><p className="mt-2 text-sm text-white/45">{t('settings.languageHint')}</p><LanguageSelect className="mt-5"/><CookieSettingsButton className="mt-5 min-h-11 text-sm text-white/50"/></div>
+      <PushSettings/>
+      <div id="settings" className="mt-8 scroll-mt-16 border-t border-white/10 py-6"><h2 className="text-xl font-semibold">{t('settings.title')}</h2><p className="mt-2 font-mono text-xs text-white/35">MyRoster · v{APP_VERSION}</p><p className="mt-2 text-sm text-white/45">{t('settings.languageHint')}</p><LanguageSelect className="mt-5"/><CookieSettingsButton className="mt-5 min-h-11 text-sm text-white/50"/></div>
     </section>
   )
 }
