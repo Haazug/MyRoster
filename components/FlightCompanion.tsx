@@ -34,17 +34,17 @@ export default function FlightCompanion(){
     for(let b of bookings){
      if(!live||(b.accountId&&b.accountId!==uid))continue
      const active=localActive()
-     if(b.scheduledAt&&b.takeoffAt===undefined&&active&&active.plan?.scheduleId===b.id&&!active.finished&&!active.takeoffAt){b={...b,takeoffAt:null};await updateTripStatus(b.id,{takeoffAt:null,status:'scheduled'})}
+     if(b.scheduledAt&&b.takeoffAt===undefined&&active&&active.plan?.scheduleId===b.id&&!active.finished&&!active.takeoffAt){b={...b,takeoffAt:null};await updateTripStatus(b.id,{takeoffAt:null,status:'scheduled'},b.scheduledAt)}
      const stage=scheduledEvent(b)
      if(!stage)continue
      const key=`myroster.schedule.${uid||'guest'}.${b.id}.${b.scheduledAt}.${stage}`
+     if(stage==='cancelled')await updateTripStatus(b.id,{status:'cancelled'},b.scheduledAt)
      if(localStorage.getItem(key))continue
-     if(stage==='cancelled')await updateTripStatus(b.id,{status:'cancelled'})
      if(!live)continue
      localStorage.setItem(key,'1')
      const title=t(stage==='due'?'schedule.due':`schedule.${stage}`),body=`${b.flightNumber||''} ${b.orig} → ${b.dest}`
      toast(title,{description:body,duration:15000,action:{label:t('trip.open'),onClick:()=>router.push('/trips')}})
-     try{if(typeof Notification!=='undefined'&&Notification.permission==='granted')new Notification(title,{body,tag:key,icon:'/icon-192.png?v=2.2.3'})}catch{}
+     try{if(typeof Notification!=='undefined'&&Notification.permission==='granted')new Notification(title,{body,tag:key,icon:'/favicon.ico'})}catch{}
     }
    }finally{checking=false}
   }

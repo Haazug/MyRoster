@@ -1,3 +1,13 @@
+## v2.2.4 — 2026-11-01
+
+- Correct scheduled preflight detection and persist cancellation after three hours without takeoff; guard stale automatic schedule updates.
+- Reschedule saved departures with a new date/time and fresh reminder lifecycle; explain browser notification and closed-site limits.
+- Apply Departure Dots to airport/airline lists, airline pages and operated-route boards.
+- Search/filter live transatlantic and transcontinental routes, including main search shortcuts.
+- Add compact alliance links below favourite airlines and translated alliance/member pages.
+- Import Volanta JSON/CSV data and MSFS share links alongside PLN, with route selection and explicit authenticated-Planner fallback.
+- Preserve the existing mobile dialogs, live discovery, radar and catalog changes. See `docs/v2.2.4.md` for formats and limitations.
+
 # Changelog
 
 ## v2.2.3 — bug fix 1 — 2026-10-31

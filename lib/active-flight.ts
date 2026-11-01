@@ -46,7 +46,7 @@ export function flightHasEnded(flight:ActiveFlight,logs:any[],bookings:any[]|nul
  }))return true
  if(!flight.plan?.scheduleId||!bookings)return false
  const trip=bookings.find(b=>b.id===flight.plan.scheduleId)
- return !trip||!!trip.endedAt||trip.status==='completed'||trip.status==='cancelled'
+ return !trip||(!!flight.plan.scheduledAt&&trip.scheduledAt!==flight.plan.scheduledAt)||!!trip.endedAt||trip.status==='completed'||trip.status==='cancelled'
 }
 export function flightSessionExpired(row:FlightRow,now=Date.now()){
  const f=row.value

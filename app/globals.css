@@ -231,3 +231,9 @@ nav[class*="fixed"] { background: rgba(10,10,10,.8) !important; border-color: rg
 }
 .dialog-sheet::backdrop { background: rgb(0 0 0 / .7); backdrop-filter: blur(8px); }
 .dialog-sheet button { border-radius: 16px; }
+
+/* v2.2.4: use the same locally hosted display type on every directory board. */
+.departure-board .board-code, .departure-board > a > span:first-child,
+.departure-board .font-mono, .board-heading, .board-display {
+ font-family:'Departure Dots',monospace; font-weight:850; font-variation-settings:'ROND' 100;
+}

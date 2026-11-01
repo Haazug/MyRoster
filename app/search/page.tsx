@@ -43,7 +43,9 @@ export default function SearchPage() {
   )
   useEffect(()=>{setView(airportHits.length?{mode:'airports',airports:airportHits}:{mode:'idle'})},[airportHits,setView])
   useEffect(()=>()=>setView({mode:'idle'}),[setView])
-  const isLive = /^(live(?: now)?|ao vivo|agora)$/i.test(t)
+  const routeQuery=t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
+  const routeKind=routeQuery.startsWith('transatlant')?'transatlantic':routeQuery.startsWith('transcontinent')?'transcontinental':'all'
+  const isLive = /^(live(?: now)?|ao vivo|agora)$/i.test(t)||routeKind!=='all'
   const pair = t.match(PAIR)
   const row = 'flex items-center gap-3 py-3'
   const head = 'mt-8 text-xs font-medium text-white/40'
@@ -58,7 +60,7 @@ export default function SearchPage() {
       </label>
 
       {!t && <Link href="/live" className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm text-white/65"><span className="size-1.5 rounded-full bg-green-400" />{tr('live.title')} · {tr('live.subtitle')}</Link>}
-      {isLive && <LiveFlights />}
+      {isLive && <LiveFlights key={routeKind} initialRouteType={routeKind} />}
       {!t && (
         <>
           {(favA.items.length > 0 || favP.items.length > 0) && (

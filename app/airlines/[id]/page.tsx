@@ -112,7 +112,7 @@ function AirlineDetailPage() {
           <AirlineLogo iata={airline.iata} icao={airline.icao} name={airline.name} size="lg" showText={false} />
           <div>
             <p className="text-xs font-semibold uppercase tracking-[.2em] text-[#55a7ff]">{tr('airlines.directory')}</p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight">{fixName(airline.name)}</h1>
+            <h1 className="board-display mt-2 text-3xl font-semibold tracking-tight">{fixName(airline.name)}</h1>
             <p className="mt-2 flex items-center gap-2 text-sm text-white/45">
               <Flag country={airline.country} size={24} />
               {airline.country} · {tr('airlines.routes',{n:counts.all})} · {airline.icao}

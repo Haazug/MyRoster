@@ -5,7 +5,7 @@ import { useT } from "@/lib/i18n"
 
 export type Ap = { iata: string; icao: string; city: string; name: string; country: string; lat: number; lon: number }
 
-export function nmBetween(a: Ap, b: Ap) {
+export function nmBetween(a: Pick<Ap,'lat'|'lon'>, b: Pick<Ap,'lat'|'lon'>) {
   const r = Math.PI / 180
   const h = Math.sin(((b.lat - a.lat) * r) / 2) ** 2 + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(((b.lon - a.lon) * r) / 2) ** 2
   return Math.round(2 * 3440.07 * Math.asin(Math.sqrt(h)))

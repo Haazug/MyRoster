@@ -1,4 +1,5 @@
 'use client'
+import {ALLIANCES} from '@/lib/alliances'
 import {usePageQuery} from '@/lib/use-page-query'
 
 import { useT } from '@/lib/i18n'
@@ -54,6 +55,7 @@ export default function Airlines() {
           </div>
         </div>
       )}
+      <nav aria-label={tr('airlines.alliance')} className="mb-5 flex flex-wrap gap-2">{ALLIANCES.map(a=><Link key={a.slug} href={`/alliances/${a.slug}`} className="flex min-h-11 items-center gap-2 rounded-full border border-white/10 px-3 text-xs"><span aria-hidden="true" className="inline-flex size-5 items-center justify-center text-sm text-yellow-200">{a.symbol}</span>{a.name}</Link>)}</nav>
       <label className="mb-5 flex min-h-12 items-center gap-3 rounded-2xl border border-white/10 bg-white/[.06] px-4">
         <Search className="size-4 text-white/40" aria-hidden="true" />
         <span className="sr-only">{tr('airlines.filter')}</span>

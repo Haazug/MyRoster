@@ -10,7 +10,7 @@ export function departureChoice(time: string, now = Date.now()) {
 }
 export type ScheduledTrip={scheduledAt?:number;startedAt?:number;takeoffAt?:number|null;endedAt?:number;status?:string}
 export const CANCELLATION_DELAY=3*3600_000
-export function hasDeparted(f:ScheduledTrip){return !!f.takeoffAt||(f.takeoffAt===undefined&&!!f.startedAt)}
+export function hasDeparted(f:ScheduledTrip){return !!f.takeoffAt||(f.takeoffAt===undefined&&!!f.startedAt&&f.status!=='scheduled'&&f.status!=='delayed')}
 export function tripState(f:ScheduledTrip,now=Date.now()):TripState{
  if(f.status==='cancelled')return 'cancelled'
  if(f.endedAt||f.status==='completed')return 'completed'
@@ -57,4 +57,10 @@ export function calendarEvent(id:string,title:string,at:number,duration:number,u
  const text=(v:string)=>v.replace(/\\/g,'\\\\').replace(/\r?\n/g,'\\n').replace(/[,;]/g,m=>'\\'+m)
  const date=(n:number)=>new Date(n).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'')
  return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//MyRoster//Flight reminder//EN','BEGIN:VEVENT',`UID:${text(id)}@myroster`,`DTSTAMP:${date(Date.now())}`,`DTSTART:${date(at)}`,`DTEND:${date(at+duration*60000)}`,`SUMMARY:${text(title)}`,`URL:${url}`,'BEGIN:VALARM','TRIGGER:PT0M','ACTION:DISPLAY',`DESCRIPTION:${text(title)}`,'END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n')+'\r\n'
+}
+
+// Keep the booking identity and route, but reset the lifecycle and its notification generation.
+export function rescheduleTrip<T extends ScheduledTrip & {plan?:any;departure?:string}>(flight:T,at:number,now=Date.now()):T {
+ if(!Number.isFinite(at)||at<=now||hasDeparted(flight)||flight.endedAt||flight.status==='completed')throw new Error('Invalid reschedule')
+ return {...flight,scheduledAt:at,departure:new Date(at).toISOString(),status:'scheduled',startedAt:undefined,takeoffAt:null,endedAt:undefined,plan:flight.plan?{...flight.plan,scheduledAt:at}:undefined}
 }

@@ -5,7 +5,8 @@ import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState, useRef } from 'react'
 import { ArrowLeft, Upload } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
-import { parsePLNFile } from '@/lib/flight-plan-parser'
+import type {ParsedFlightPlan} from '@/lib/flight-plan-parser'
+import {parseRouteData} from '@/lib/route-import'
 import { matchAircraft } from '@/lib/aircraft-db'
 import { estimateBlockMinutes, parseSpeedAt } from '@/lib/flight-time'
 import { flightNumberPart } from '@/lib/live-model'
@@ -49,7 +50,7 @@ export default function FlightPlanPage() {
   const [ready, setReady] = useState(false)
   const [error, setError] = useState('')
   const [form, setForm] = useState({ flight: '', dep: '', arr: '', aircraft: '', time: '12:00', fl: 350, speed: '', duration: 60 })
-  const set = (k: string, v: any) => { setReady(false); setForm((f) => ({ ...f, [k]: v })) }
+  const set = (k: string, v: any) => { setReady(false); if(k==='dep'||k==='arr')setPln(null); setForm((f) => ({ ...f, [k]: v })) }
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -108,12 +109,12 @@ export default function FlightPlanPage() {
     if(launchLock.current)return
     launchLock.current=true;setLaunching(true)
     try {
+    if(scheduledAt&&typeof Notification!=='undefined'&&Notification.permission==='default')void Notification.requestPermission().catch(()=>{})
     const scheduleId=scheduledAt?crypto.randomUUID():undefined
     const {data:session}=await supabase.auth.getSession()
     const plan={...(seed||{}),createdAt:Date.now(),id:String(id),airlineIata:seed?.airlineIata||String(id).split('-')[0].toUpperCase(),flightNumber:flightNumberPart(form.flight,seed?.airlineIata||'',seed?.airlineIcao||''),from:o.from,to:o.to,fromCity:o.fromCity,toCity:o.toCity,aircraft:o.aircraft,altitude:o.fl*100,distanceNm:o.distanceNm,durationMin:o.durationMin,fromLat:o.fromLat,fromLon:o.fromLon,toLat:o.toLat,toLon:o.toLon,waypoints:o.waypoints,scheduledAt,scheduleId,accountId:session.session?.user.id}
     if(scheduledAt){
-      setBookings([...bookings,{id:scheduleId!,planId:String(id),plan,airlineIata:plan.airlineIata,airlineName:plan.airlineName||plan.airlineIata,orig:o.from,dest:o.to,fromCity:o.fromCity,toCity:o.toCity,flightNumber:form.flight||String(id),aircraft:o.aircraft,departure:new Date(scheduledAt).toISOString(),distanceNm:o.distanceNm,scheduledAt,status:'scheduled',accountId:session.session?.user.id} as RosterFlight])
-      if(typeof Notification!=='undefined'&&Notification.permission==='default')await Notification.requestPermission().catch(()=>{})
+      setBookings([...bookings,{id:scheduleId!,planId:String(id),plan,airlineIata:plan.airlineIata,airlineName:plan.airlineName||plan.airlineIata,orig:o.from,dest:o.to,fromCity:o.fromCity,toCity:o.toCity,flightNumber:form.flight||String(id),aircraft:o.aircraft,departure:new Date(scheduledAt).toISOString(),distanceNm:o.distanceNm,scheduledAt,takeoffAt:null,status:'scheduled',accountId:session.session?.user.id} as RosterFlight])
       setPending(null);router.push('/trips');return
     }
     try {
@@ -157,35 +158,39 @@ export default function FlightPlanPage() {
 
   // .pln: the waypoints are read, the route is recalculated through them and drawn on the globe
   const [pln, setPln] = useState<{ from: string; to: string; fl: number; distance: number; direct: number; wps: { id?: string; lat: number; lon: number }[] } | null>(null)
+  const [importText,setImportText]=useState(''),[importing,setImporting]=useState(false),[imported,setImported]=useState<ParsedFlightPlan[]>([]),[selectedImport,setSelectedImport]=useState(0)
+  const applyImport = (p:ParsedFlightPlan) => {
+      setError('');setFromAp(null);setToAp(null)
+      setForm(f=>({...f,dep:p.departure,arr:p.arrival,aircraft:p.aircraft||f.aircraft,flight:p.flightNumber||f.flight,fl:Math.round(p.cruiseAltitude/100),duration:p.estimatedTime||f.duration}))
+      const wps=p.waypoints.map(w=>({id:w.id,lat:w.latitude,lon:w.longitude}))
+      const direct=wps.length>1?nmBetween(wps[0],wps[wps.length-1]):0
+      let distance=0;for(let i=1;i<wps.length;i++)distance+=nmBetween(wps[i-1],wps[i])
+      setPln({from:p.departure,to:p.arrival,fl:Math.round(p.cruiseAltitude/100),distance:distance||p.distance,direct,wps});setReady(false)
+  }
+  const importContent=(text:string)=>{const plans=parseRouteData(text);setImported(plans);setSelectedImport(0);applyImport(plans[0])}
+  const importPasted=async()=>{setImporting(true);setError('');try{let content=importText.trim();if(/^https?:/i.test(content)){const response=await fetch('/api/flight-plan/import',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:content})});const data=await response.json();if(!response.ok){setError(t(data.error==='authentication'?'plan.importAuth':'plan.importError'));return}content=data.content}importContent(content)}catch{setError(t('plan.importError'))}finally{setImporting(false)}}
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     e.target.value = ''
     if (!file) return
     try {
-      setError('')
-      const p = parsePLNFile(await file.text())
-      const wps = (p.waypoints || []).filter((w) => w && isFinite(w.latitude) && isFinite(w.longitude) && (w.latitude !== 0 || w.longitude !== 0)).map((w) => ({ id: w.id, lat: w.latitude, lon: w.longitude }))
-      let direct = 0
-      if (wps.length > 1) direct = nmBetween({ lat: wps[0].lat, lon: wps[0].lon } as Ap, { lat: wps[wps.length - 1].lat, lon: wps[wps.length - 1].lon } as Ap)
-      let route = 0
-      for (let i = 1; i < wps.length; i++) route += nmBetween({ lat: wps[i - 1].lat, lon: wps[i - 1].lon } as Ap, { lat: wps[i].lat, lon: wps[i].lon } as Ap)
-      if (!route) route = p.distance || 0
-      setPln({ from: p.departure, to: p.arrival, fl: Math.round(p.cruiseAltitude / 100), distance: route, direct, wps })
-      setReady(false)
+      if(file.size>2_000_000)throw Error('Too large')
+      importContent(await file.text())
     } catch {
-      setError(t('plan.errPln'))
+      setError(t('plan.importError'))
     }
   }
   const plnFl = pln?.fl || form.fl
-  const plnMin = pln ? (pln.distance ? estimateBlockMinutes(pln.distance, acName, { routed: true, fl: plnFl, speedKt: parseSpeedAt(form.speed, plnFl) || undefined }) : form.duration) : 0
+  const importedDistance=pln?.distance||geo?.distanceNm||0
+  const plnMin = pln ? (importedDistance ? estimateBlockMinutes(importedDistance, acName, { routed: true, fl: plnFl, speedKt: parseSpeedAt(form.speed, plnFl) || undefined }) : form.duration) : 0
   const plnLaunch = () => {
     if (!pln) return
     const f = pln.wps[0]
     const l = pln.wps[pln.wps.length - 1]
     launch({
-      from: pln.from, to: pln.to, fromCity: pln.from, toCity: pln.to,
-      aircraft: acName, fl: plnFl, distanceNm: pln.distance, durationMin: plnMin,
-      fromLat: f?.lat, fromLon: f?.lon, toLat: l?.lat, toLon: l?.lon, waypoints: pln.wps,
+      from: fromAp?.iata||pln.from, to: toAp?.iata||pln.to, fromCity: fromAp?.city||pln.from, toCity: toAp?.city||pln.to,
+      aircraft: acName, fl: plnFl, distanceNm: importedDistance, durationMin: plnMin,
+      fromLat: f?.lat??fromAp?.lat, fromLon: f?.lon??fromAp?.lon, toLat: l?.lat??toAp?.lat, toLon: l?.lon??toAp?.lon, waypoints: pln.wps,
     })
   }
 
@@ -204,11 +209,14 @@ export default function FlightPlanPage() {
 
       <div className="mt-6 rounded-2xl border border-white/10 bg-black/40 p-5">
         <h2 className="text-sm font-medium text-white/70">{t('plan.uploadTitle')}</h2>
-        <p className="mb-3 mt-1 text-xs text-white/40">{t('plan.uploadHint')}</p>
+        <p className="mb-3 mt-1 text-xs text-white/40">{t('plan.importHint')}</p>
         <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-[#1f88ff] px-4 py-2 text-sm font-medium">
           <Upload className="size-4" /> {t('plan.choose')}
-          <input type="file" accept=".pln,.xml" onChange={handleFile} className="hidden" />
+          <input type="file" accept=".pln,.xml,.json,.csv" onChange={handleFile} className="hidden" />
         </label>
+        <label className="mt-4 block text-xs text-white/60">{t('plan.importLabel')}<textarea value={importText} onChange={e=>setImportText(e.target.value)} maxLength={2000000} rows={4} className={`${inputCls} mt-2`} placeholder="https://planner.flightsimulator.com/share/…" /></label>
+        <button disabled={importing||!importText.trim()} onClick={importPasted} className="mt-2 min-h-11 rounded-xl border border-white/15 px-4 text-sm disabled:opacity-40">{t(importing?'live.loading':'plan.importAction')}</button>
+        {imported.length>1&&<label className="mt-3 block text-xs">{t('plan.importSelect')}<select value={selectedImport} onChange={e=>{const index=Number(e.target.value);setSelectedImport(index);applyImport(imported[index])}} className={`${inputCls} mt-2 bg-black`}>{imported.map((p,i)=><option key={i} value={i}>{i+1}. {p.departure} → {p.arrival} {p.flightNumber}</option>)}</select></label>}
       </div>
 
       <div className="mt-4 rounded-2xl border border-white/10 bg-black/40 p-5">
@@ -265,8 +273,8 @@ export default function FlightPlanPage() {
             <p className="mt-1 text-white/60">{t('plan.plnWaypoints', { n: pln.wps.length })}</p>
             <p className="mt-1 text-white/60">
               {pln.direct && pln.distance
-                ? t('plan.plnRoute', { route: Math.round(pln.distance).toLocaleString('en-US'), direct: Math.round(pln.direct).toLocaleString('en-US'), extra: Math.max(0, Math.round((pln.distance / pln.direct - 1) * 100)) })
-                : t('plan.plnRouteOnly', { route: Math.round(pln.distance).toLocaleString('en-US') })}
+                ? t('plan.plnRoute', { route: Math.round(importedDistance).toLocaleString('en-US'), direct: Math.round(pln.direct).toLocaleString('en-US'), extra: Math.max(0, Math.round((pln.distance / pln.direct - 1) * 100)) })
+                : t('plan.plnRouteOnly', { route: Math.round(importedDistance).toLocaleString('en-US') })}
               {' · '}{Math.floor(plnMin / 60)}h {String(plnMin % 60).padStart(2, '0')}m
             </p>
           </div>
@@ -274,7 +282,7 @@ export default function FlightPlanPage() {
             tear
             data={{
               from: pln.from, to: pln.to, airline: seed?.airlineName, airlineIata: seed?.airlineIata, flight: form.flight || String(id).toUpperCase(), aircraft: acName,
-              distanceNm: Math.round(pln.distance), durationMin: plnMin, date: new Date().toISOString().slice(0, 10),
+              distanceNm: Math.round(importedDistance), durationMin: plnMin, date: new Date().toISOString().slice(0, 10),
             }}
             onBoard={plnLaunch}
           />

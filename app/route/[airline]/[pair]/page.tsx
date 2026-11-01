@@ -152,7 +152,7 @@ function RouteContent() {
           <p className="text-xs font-semibold uppercase tracking-[.2em] text-yellow-300">
             {data.operated ? (data.codeshare ? t('route.codeshare') : t('route.operated')) : t('route.notListed')}
           </p>
-          <h1 className="mt-2 text-balance text-3xl font-semibold sm:text-4xl">{t('route.title', { from: data.from.city, to: data.to.city })}</h1>
+          <h1 className="board-display mt-2 text-balance text-3xl font-semibold sm:text-4xl">{t('route.title', { from: data.from.city, to: data.to.city })}</h1>
           <p className="mt-2 text-sm text-white/45">{fixName(data.airline.name)} · {flightCode || (callsign ? `${t('flight.callsign')}: ${callsign}` : t('route.chooseNumber'))}</p>
         </div>
         <button
@@ -189,7 +189,7 @@ function RouteContent() {
         </div>
       )}
 
-      <div className="mt-6 overflow-hidden border-y-2 border-yellow-300/70 bg-black/30 font-mono">
+      <div className="mt-6 overflow-hidden border-y-2 border-yellow-300/70 bg-black/30 board-display">
         <div className="flex items-center gap-3 border-b border-white/10 p-4">
           <AirlineLogo iata={data.airline.iata} icao={data.airline.icao} name={fixName(data.airline.name)} size="md" showText={false} />
           <div className="min-w-0">

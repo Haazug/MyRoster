@@ -2,7 +2,7 @@
 export const PRIMARY_HUBS: Record<string, string[]> = {
  KLM:['AMS'],AFR:['CDG','ORY'],DLH:['FRA','MUC'],BAW:['LHR','LGW'],IBE:['MAD'],TAP:['LIS','OPO'],DTA:['NBJ'],UAE:['DXB'],QTR:['DOH'],ETH:['ADD'],THY:['IST'],SIA:['SIN'],KQA:['NBO'],RAM:['CMN'],SAA:['JNB'],SWR:['ZRH','GVA'],AUA:['VIE'],BEL:['BRU'],FIN:['HEL'],SAS:['CPH','OSL','ARN'],AEE:['ATH'],EIN:['DUB'],RYR:['DUB','STN'],EZY:['LTN','LGW'],WZZ:['BUD'],VLG:['BCN'],GLO:['GRU','GIG','BSB'],LNK:['JNB','CPT'],GFA:['BAH'],DAL:['ATL','DTW','MSP'],AAL:['DFW','CLT','MIA'],UAL:['ORD','DEN','IAH'],QFA:['SYD','MEL'],ANZ:['AKL'],CPA:['HKG'],ANA:['HND','NRT'],JAL:['HND','NRT'],KAL:['ICN'],ETD:['AUH'],SVA:['JED','RUH'],MSR:['CAI'],TAM:['GRU'],LAN:['SCL'],AVA:['BOG'],CMP:['PTY'],ACA:['YYZ','YUL','YVR'],VOZ:['BNE','MEL','SYD'],TVF:['ORY'],TRA:['AMS'],JST:['MEL'],FDB:['DXB'],IGO:['DEL','BOM'],AIC:['DEL','BOM'],CES:['PVG'],CSN:['CAN'],CCA:['PEK'],MAS:['KUL'],THA:['BKK'],VNA:['HAN','SGN'],AAR:['ICN'],LOT:['WAW'],ROT:['OTP'],ICE:['KEF'],ITY:['FCO'],SBI:['DME'],AFL:['SVO'],PGT:['SAW'],SXS:['AYT'],TUI:['HAJ'],NAX:['OSL'],AXM:['KUL'],FDX:['MEM'],UPS:['SDF']
 }
-const alliances: Record<string,string[]> = {
+export const alliances: Record<string,string[]> = {
  'Star Alliance':['AEE','ACA','CCA','AIC','ANZ','ANA','AUA','AVA','BEL','CMP','CTN','MSR','ETH','EVA','LOT','DLH','CSZ','SIA','SAA','SWR','TAP','THA','THY','UAL','ITY'],
  'SkyTeam':['ARG','AMX','AEA','AFR','CAL','CES','DAL','GIA','KQA','KLM','KAL','MEA','SVA','SAS','ROT','VNA','VIR','XMN'],
  'oneworld':['ASA','AAL','BAW','CPA','FJI','FIN','IBE','JAL','MAS','OMA','QFA','QTR','RAM','RJA','ALK']

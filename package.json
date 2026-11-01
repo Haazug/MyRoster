@@ -1,6 +1,6 @@
 {
   "name": "my-project",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "private": true,
   "packageManager": "pnpm@12.3.4",
   "scripts": {
@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "live:worker": "node --env-file-if-exists=.env.local tools/sync-live.mjs",
-    "test": "node --experimental-transform-types tests/live-model.test.mjs && node tests/live-discovery.test.cjs && node tests/live-history.test.cjs && node tests/live-device.test.cjs && node tests/flight-workflow.test.cjs && node tests/catalog.test.cjs && node tests/sound.test.cjs && node tests/route-flight-numbers.test.cjs && node tests/globe-discovery.test.cjs && node tests/active-flight-lifecycle.test.cjs && node tests/radar-airports.test.cjs && node tests/v223-features.test.cjs && node tests/brand-assets.test.cjs && node tests/radar-sources.test.cjs"
+    "test": "node --experimental-transform-types tests/live-model.test.mjs && node tests/live-discovery.test.cjs && node tests/live-history.test.cjs && node tests/live-device.test.cjs && node tests/flight-workflow.test.cjs && node tests/catalog.test.cjs && node tests/sound.test.cjs && node tests/route-flight-numbers.test.cjs && node tests/globe-discovery.test.cjs && node tests/active-flight-lifecycle.test.cjs && node tests/radar-airports.test.cjs && node tests/v223-features.test.cjs && node tests/brand-assets.test.cjs && node tests/radar-sources.test.cjs && node tests/v224-features.test.cjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

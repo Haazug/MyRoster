@@ -3,7 +3,7 @@ export type ResolvedFlight = {
   hex: string; callsign: string; flightNumber: string; airlineIata: string; airlineIcao: string; airlineName: string
   from: string | null; to: string | null; fromCity: string; toCity: string
   type?: string; altFt: number | null; onGround: boolean; gs?: number; lat: number; lon: number
-  reg?:string;eta?:number;etaSource?:'schedule'|'position'|'route';transatlantic?:boolean;lastSeenPlace?:string;
+  reg?:string;eta?:number;etaSource?:'schedule'|'position'|'route';transatlantic?:boolean;transcontinental?:boolean;lastSeenPlace?:string;
   id?: string; routeCheckedAt?: number; source?: 'radar' | 'timetable'; updatedAt?: number; expiresAt?: number; departedAt?: number; arrivesAt?: number; serviceDate?: string; terminal?: boolean
   observedAt: number; status: 'observed' | 'estimated'; remainingMinutes: null
 }
