@@ -58,7 +58,8 @@ export default function GlobeInner() {
   }
   const exploring=useMapStore(s=>s.exploring)
   const selection=useMapStore(s=>s.discoverySelection),select=useMapStore(s=>s.setDiscoverySelection)
-  const discovering=canDiscoverGlobe(usePathname(),exploring)
+  const inFlight=useMapStore(s=>s.view.mode==='route'&&typeof s.view.progress==='number')
+  const discovering=canDiscoverGlobe(usePathname(),exploring,inFlight)
   const {data:catalog}=useGlobeDiscovery(discovering),{data:geography}=useGlobeCountries(discovering)
   const discovery=useMemo(()=>discovering&&catalog?discoveryContext(catalog,selection):null,[discovering,catalog,selection])
   const discoveryAirport=discovery?.airport||(discovery?.airline?catalog?.airports.find(a=>a.iata===discovery.airline?.hubs[0]):undefined)
@@ -193,7 +194,14 @@ export default function GlobeInner() {
   const airports=view.mode==='airports'?view.airports:undefined
   const point=view.mode==='point'?view.point:undefined, nearby=view.mode==='point'?view.nearby:undefined
   const selected=view.mode==='airports'?view.selected:point?.iata
-  const points=useMemo(()=>discovering?[]:airports?airports.map(p=>({...p,r:p.iata===selected?0.17:0.09,color:p.iata===selected?'#facc15':'#ffffff'})):point?[{...point,r:0.17,color:'#facc15'},...(nearby||[]).filter(p=>p.iata!==point.iata).map(p=>({...p,r:0.08,color:'#ffffff'}))]:from&&to?[{...from,r:0.18,color:'#facc15'},{...to,r:0.18,color:'#facc15'}]:hubs.slice(0,3).map((h,i)=>({...h.p,r:i===0?0.24:0.16,color:'#facc15'})),[discovering,airports,selected,point,nearby,from,to,hubs])
+    const hubPts=useMemo<Point[]>(()=>view.mode==='airline'?(view.hubs?.length?hubs:hubs.slice(0,3)).map(h=>h.p):[],[view,hubs])
+  const destPts=useMemo<Point[]>(()=>{
+    if(view.mode!=='airline')return []
+    const skip=new Set(hubPts.map(p=>p.iata)),seen=new Set<string>(),out:Point[]=[]
+    for(const r of view.routes.slice(0,600))for(const p of [r.from,r.to]){if(skip.has(p.iata)||seen.has(p.iata))continue;seen.add(p.iata);out.push(p)}
+    return out
+  },[view,hubPts])
+  const points=useMemo(()=>discovering?[]:airports?airports.map(p=>({...p,r:p.iata===selected?0.17:0.09,color:p.iata===selected?'#facc15':'#ffffff'})):point?[{...point,r:0.17,color:'#facc15'},...(nearby||[]).filter(p=>p.iata!==point.iata).map(p=>({...p,r:0.08,color:'#ffffff'}))]:from&&to?[{...from,r:0.18,color:'#facc15'},{...to,r:0.18,color:'#facc15'}]:[...destPts.map(p=>({...p,r:0.1,color:'#ffffff'})),...hubPts.map((p,i)=>({...p,r:i===0?0.24:0.16,color:'#facc15'}))],[discovering,airports,selected,point,nearby,from,to,destPts,hubPts])
 
   const selectedPoints=useMemo(()=>discoveryAirport?[discoveryAirport]:discovering?[]:point?[point]:from&&to?[from,to]:airports?airports.filter(p=>p.iata===selected):hubs.slice(0,3).map(h=>h.p),[discovering,point,from,to,airports,selected,hubs,discoveryAirport])
 

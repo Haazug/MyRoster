@@ -10,6 +10,7 @@ export type PilotProfile = {
   createdAt: number
   totalFlights: number
   totalHours: number
+  airline?: { id: string; name: string; initials: string; shape: "circle" | "square" | "shield" | "diamond"; color1: string; color2: string }
 }
 
 export type PilotFriend = {

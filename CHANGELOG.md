@@ -1,3 +1,11 @@
+## v2.3.0 — 2026-11-03
+
+- Add official Star Alliance, SkyTeam and oneworld logos, and smooth page transitions.
+- Show the hub in yellow and arrival airports as white dots on airline pages.
+- Restrict the explorable globe to flights, the home screen, routes and airline/airport pages; show national airlines first on airports, then other airlines landing there.
+- Add a per-version "What's new" screen on the home page in all five languages, always ending with bug fixes, and a first-visit notifications prompt.
+- Add community airlines: create (shape, initials, colors, hub, routes), publish, save, report, and show the airline on the profile and invite card.
+
 ## v2.2.5 — 2026-11-01
 
 - Add optional Web Push for scheduled flights with per-device alert preferences, native permission prompts and a test notification.

@@ -1,4 +1,6 @@
+import Link from 'next/link'
 import { Flag } from '@/components/Flag'
+import CustomAirlineLogo from '@/components/CustomAirlineLogo'
 import type { PilotProfile } from '@/lib/pilot-profile'
 
 export function PilotBadge({ pilot, children }: { pilot: PilotProfile; children?: React.ReactNode }) {
@@ -22,6 +24,12 @@ export function PilotBadge({ pilot, children }: { pilot: PilotProfile; children?
             <Flag country={pilot.nationality} size={24} />
             {pilot.nationality}
           </p>
+        )}
+        {pilot.airline && (
+          <Link href={`/community/${pilot.airline.id}`} className="mt-3 inline-flex max-w-full items-center gap-2 rounded-full border border-white/15 py-1 pl-1 pr-3 text-sm">
+            <CustomAirlineLogo a={pilot.airline} size={28} />
+            <span className="min-w-0 truncate">{pilot.airline.name}</span>
+          </Link>
         )}
         {pilot.developer && <p className="mt-2 inline-block rounded-full border border-[#1f88ff]/50 px-3 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-[#55a7ff]">Developer</p>}
         <div className="mt-5 flex items-end justify-center gap-[2px]" aria-hidden="true">

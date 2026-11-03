@@ -1,4 +1,5 @@
 'use client'
+import AllianceLogo from '@/components/AllianceLogo'
 import {ALLIANCES} from '@/lib/alliances'
 import {usePageQuery} from '@/lib/use-page-query'
 
@@ -40,7 +41,7 @@ export default function Airlines() {
         <p className="text-xs font-semibold uppercase tracking-[.2em] text-[#55a7ff]">{tr('airlines.directory')}</p>
         <h1 className="mt-2 text-4xl font-semibold tracking-tight">{tr('airlines.title')}</h1>
         <p className="mt-2 text-white/45">{tr('airlines.subtitle')}</p>
-        <Link href="/free" className="mt-4 inline-flex min-h-11 items-center rounded-xl border border-white/15 bg-white/10 px-4 text-sm font-medium">{tr('nav.free')}</Link>
+        <Link href="/free" className="mt-4 inline-flex min-h-11 items-center rounded-xl border border-white/15 bg-white/10 px-4 text-sm font-medium">{tr('nav.free')}</Link><Link href="/community" className="mt-4 ml-2 inline-flex min-h-11 items-center rounded-xl border border-white/15 bg-white/10 px-4 text-sm font-medium">{tr('community.title')}</Link>
       </header>
       {(top.length > 0 || favList.length > 0) && !q && (
         <div className="mb-5">
@@ -55,7 +56,7 @@ export default function Airlines() {
           </div>
         </div>
       )}
-      <nav aria-label={tr('airlines.alliance')} className="mb-5 flex flex-wrap gap-2">{ALLIANCES.map(a=><Link key={a.slug} href={`/alliances/${a.slug}`} className="flex min-h-11 items-center gap-2 rounded-full border border-white/10 px-3 text-xs"><span aria-hidden="true" className="inline-flex size-5 items-center justify-center text-sm text-yellow-200">{a.symbol}</span>{a.name}</Link>)}</nav>
+      <nav aria-label={tr('airlines.alliance')} className="mb-5 flex flex-wrap gap-2">{ALLIANCES.map(a=><Link key={a.slug} href={`/alliances/${a.slug}`} className="flex min-h-11 items-center gap-2 rounded-full border border-white/10 px-3 text-xs"><AllianceLogo slug={a.slug} symbol={a.symbol} className="h-6" />{a.name}</Link>)}</nav>
       <label className="mb-5 flex min-h-12 items-center gap-3 rounded-2xl border border-white/10 bg-white/[.06] px-4">
         <Search className="size-4 text-white/40" aria-hidden="true" />
         <span className="sr-only">{tr('airlines.filter')}</span>

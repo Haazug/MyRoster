@@ -1,3 +1,4 @@
+import {globeNavAllowed} from './globe-rules'
 import type {Db} from './openflights-parse'
 import {isoOf} from './flags'
 import {allianceFor} from './airline-metadata'
@@ -8,7 +9,7 @@ export type DiscoveryAirline={id:string;name:string;iata:string;icao:string;coun
 export type DiscoveryCountry={code:string;name:string;airports:number;airlines:number;lat:number;lon:number}
 export type DiscoveryCatalog={airports:DiscoveryAirport[];airlines:DiscoveryAirline[];countries:DiscoveryCountry[]}
 export const countryCode=(name:string)=>isoOf(name)||name
-export function canDiscoverGlobe(path:string,exploring:boolean){return path==='/'&&exploring}
+export function canDiscoverGlobe(path:string,exploring:boolean,inFlight=false){return exploring&&globeNavAllowed(path,inFlight)}
 export function buildGlobeDiscovery(db:Db):DiscoveryCatalog{
  const hubs:Map<string,string[]>=(db as Db&{hubs?:Map<string,string[]>}).hubs||new Map()
  const airlines:DiscoveryAirline[]=[...db.airlines.values()].filter(a=>a.active).map(a=>({...a,countryCode:countryCode(a.country),alliance:allianceFor(a.icao),hubs:hubs.get(a.id)||[],numRoutes:mergeRoutes(hubRoutes(db.routesByAirline.get(a.id)||[],hubs.get(a.id)||[])).length})).filter(a=>a.numRoutes>0)

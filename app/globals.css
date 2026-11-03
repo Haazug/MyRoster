@@ -237,3 +237,7 @@ nav[class*="fixed"] { background: rgba(10,10,10,.8) !important; border-color: rg
 .departure-board .font-mono, .board-heading, .board-display {
  font-family:'Departure Dots',monospace; font-weight:850; font-variation-settings:'ROND' 100;
 }
+
+@keyframes page-enter{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.page-enter{animation:page-enter .28s ease-out both}
+@media (prefers-reduced-motion:reduce){.page-enter{animation:none}}

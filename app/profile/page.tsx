@@ -10,6 +10,7 @@ import { CookieSettingsButton } from '@/components/CookieBanner'
 import { LanguageSelect } from '@/components/LanguageGate'
 import { useT, useLang } from '@/lib/i18n'
 import { supabase } from '@/lib/supabase'
+import { featuredAirline } from '@/lib/custom-airlines'
 import { getProfile, getFriends, saveProfile, generateShareCode, getPilotStats, pullAccountData, pushAccountData, decodeShareCode, type PilotProfile } from '@/lib/pilot-profile'
 
 const DEVELOPER_SECRET = "13442018"
@@ -208,7 +209,7 @@ export default function ProfilePage() {
         const short = uid.replace(/-/g, '').slice(0, 8)
         const { error } = await supabase
           .from('pilot_invites')
-          .upsert({ code: short, user_id: uid, profile: prof, updated_at: new Date().toISOString() })
+          .upsert({ code: short, user_id: uid, profile: { ...prof, airline: await featuredAirline(uid) }, updated_at: new Date().toISOString() })
         if (!error) link = `${window.location.origin}/invite/${short}`
       }
     } catch {}
@@ -248,6 +249,7 @@ export default function ProfilePage() {
       </div>
 
       <Link href="#settings" className="mt-5 inline-flex min-h-11 items-center text-sm text-white/60">{t('settings.title')}</Link>
+      <Link href="/community" className="mt-5 ml-4 inline-flex min-h-11 items-center text-sm text-white/60">{t("community.title")}</Link>
       <div className="mt-6 rounded-2xl border border-white/10 bg-[#0a0a0acc] p-6">
         {/* Avatar */}
         <label className="flex flex-col items-center gap-3 cursor-pointer group">

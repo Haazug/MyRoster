@@ -3,11 +3,13 @@
 import Link from 'next/link'
 import { Search, Globe } from 'lucide-react'
 import { useT } from '@/lib/i18n'
+import WelcomeModals from '@/components/WelcomeModals'
 
 export default function Home() {
   const t = useT()
   return (
     <section className="flex min-h-screen flex-col justify-center p-6 pb-32 sm:p-10">
+      <WelcomeModals />
       <div className="max-w-xl">
         <p className="text-[11px] font-medium uppercase tracking-[.3em] text-white/40">{t('home.kicker')}</p>
 

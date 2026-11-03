@@ -6,6 +6,9 @@ import { supabase } from '@/lib/supabase'
 import { canStorePreferences } from '@/lib/consent'
 import { interfaceText, interfaceLanguages } from '@/lib/interface-i18n'
 import { en, pt, it, fr, es, type Dict } from '@/lib/i18n-dict'
+import { V230 } from '@/lib/i18n-v230'
+import { V230B } from '@/lib/i18n-v230b'
+import { V230C } from '@/lib/i18n-community'
 
 export const LANGS = [
   { code: 'en', label: 'English' },
@@ -18,6 +21,7 @@ export type Lang = (typeof LANGS)[number]['code']
 
 const DICTS: Record<Lang, Dict> = { en: { ...en }, pt: { ...pt }, it: { ...it }, fr: { ...fr }, es: { ...es } }
 for (const [key, values] of Object.entries(interfaceText)) interfaceLanguages.forEach((lang, i) => { DICTS[lang][key] = values[i] })
+for (const l of LANGS) Object.assign(DICTS[l.code], V230[l.code], V230B[l.code], V230C[l.code])
 const KEY = 'myroster.lang'
 const valid = (v: unknown): v is Lang => LANGS.some((l) => l.code === v)
 
