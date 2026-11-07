@@ -241,3 +241,10 @@ nav[class*="fixed"] { background: rgba(10,10,10,.8) !important; border-color: rg
 @keyframes page-enter{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .page-enter{animation:page-enter .28s ease-out both}
 @media (prefers-reduced-motion:reduce){.page-enter{animation:none}}
+
+/* iOS Safari faz zoom em campos com letra < 16px e depois não sai do zoom */
+@media (max-width: 1023px) {
+  input, select, textarea { font-size: 16px !important; }
+}
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overflow-x: clip; }
+body { max-width: 100vw; }
