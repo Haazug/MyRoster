@@ -322,12 +322,5 @@ export const interfaceText: Record<string, readonly [string,string,string,string
  'trip.start':['Start now','Iniciar agora','Inizia ora','Commencer maintenant','Iniciar ahora'],
  'schedule.invalidTime':['Enter a valid departure time.','Introduz uma hora de saída válida.','Inserisci un’ora di partenza valida.','Saisissez une heure de départ valide.','Introduce una hora de salida válida.'],
  'fly.progress':['Route progress','Progresso da rota','Avanzamento della rotta','Progression de la liaison','Progreso de la ruta'],
- "release.title":["What’s new in 2.3.5","Novidades da 2.3.5","Novità della 2.3.5","Nouveautés de la 2.3.5","Novedades de la 2.3.5"],
- "release.n1":["Radar reaches 250 nm around each airport","O radar alcança 250 nm à volta de cada aeroporto","Il radar copre 250 nm attorno a ogni aeroporto","Le radar couvre 250 nm autour de chaque aéroport","El radar alcanza 250 nm alrededor de cada aeropuerto"],
- "release.n2":["New flights are detected every 5 minutes","Voos novos são detetados de 5 em 5 minutos","I nuovi voli vengono rilevati ogni 5 minuti","Les nouveaux vols sont détectés toutes les 5 minutes","Los vuelos nuevos se detectan cada 5 minutos"],
- "release.n3":["Flights leave the list when they land","Os voos saem da lista quando aterram","I voli escono dall’elenco quando atterrano","Les vols quittent la liste à l’atterrissage","Los vuelos salen de la lista al aterrizar"],
- "release.n4":["Notifications now request sound","As notificações passam a pedir som","Le notifiche ora richiedono il suono","Les notifications demandent désormais le son","Las notificaciones ahora piden sonido"],
- "release.bugs":["Bug fixes","Correção de erros","Correzione di bug","Corrections de bugs","Corrección de errores"],
- "release.ok":["Got it","Entendi","Ho capito","Compris","Entendido"],
 }
 export const interfaceLanguages = ['en','pt','it','fr','es'] as const

@@ -1,12 +1,10 @@
-import {APP_VERSION} from '@/lib/release'
-type L='en'|'pt'|'it'|'fr'|'es'
-export const WHATS_NEW:{version:string;items:Record<L,string[]>}={
- version:APP_VERSION,
- items:{
-  pt:['Logos oficiais das alianças Star Alliance, SkyTeam e oneworld.','Transições suaves entre páginas.','Globo: hub em amarelo e aeroportos de chegada com um ponto branco.','Globo navegável durante o voo, no ecrã principal, nas rotas e nas companhias.','Aeroportos: primeiro a companhia nacional, depois as outras que lá aterram.','Pedido de notificações logo no início.','Companhias da comunidade: cria, publica e guarda companhias, e mostra a tua no perfil e no cartão.','Correção de erros.'],
-  en:['Official logos for Star Alliance, SkyTeam and oneworld.','Smooth transitions between pages.','Globe: hub in yellow and arrival airports with a white dot.','Explorable globe during flights, on the home screen, on routes and on airlines.','Airports: national airline first, then the others that land there.','Notification request right at the start.','Community airlines: create, publish and save airlines, and show yours on your profile and card.','Bug fixes.'],
-  it:['Loghi ufficiali di Star Alliance, SkyTeam e oneworld.','Transizioni fluide tra le pagine.','Globo: hub in giallo e aeroporti di arrivo con un punto bianco.','Globo esplorabile durante il volo, nella schermata principale, nelle rotte e nelle compagnie.','Aeroporti: prima la compagnia nazionale, poi le altre che vi atterrano.','Richiesta di notifiche fin dall’inizio.','Compagnie della community: crea, pubblica e salva compagnie e mostra la tua nel profilo e nella tessera.','Correzione di bug.'],
-  fr:['Logos officiels de Star Alliance, SkyTeam et oneworld.','Transitions fluides entre les pages.','Globe : hub en jaune et aéroports d’arrivée avec un point blanc.','Globe explorable pendant le vol, sur l’écran d’accueil, sur les routes et les compagnies.','Aéroports : d’abord la compagnie nationale, puis les autres qui y atterrissent.','Demande de notifications dès le début.','Compagnies de la communauté : créez, publiez et enregistrez des compagnies, et affichez la vôtre sur votre profil et votre carte.','Corrections de bugs.'],
-  es:['Logotipos oficiales de Star Alliance, SkyTeam y oneworld.','Transiciones suaves entre páginas.','Globo: hub en amarillo y aeropuertos de llegada con un punto blanco.','Globo explorable durante el vuelo, en la pantalla principal, en las rutas y en las aerolíneas.','Aeropuertos: primero la aerolínea nacional, luego las demás que aterrizan allí.','Solicitud de notificaciones desde el principio.','Aerolíneas de la comunidad: crea, publica y guarda aerolíneas, y muestra la tuya en tu perfil y en tu tarjeta.','Corrección de errores.']
- }
+export const WHATS_NEW = {
+  version: '2.3.5',
+  items: {
+    en: ['Radar now reaches 250 nm around each airport.', 'New flights are detected every 5 minutes.', 'Flights leave the list when they land.', 'Notifications now request sound.', 'Bug fixes.'],
+    pt: ['O radar alcança agora 250 nm à volta de cada aeroporto.', 'Voos novos são detetados de 5 em 5 minutos.', 'Os voos saem da lista quando aterram.', 'As notificações passam a pedir som.', 'Correção de erros.'],
+    it: ['Il radar copre ora 250 nm attorno a ogni aeroporto.', 'I nuovi voli vengono rilevati ogni 5 minuti.', 'I voli escono dall’elenco quando atterrano.', 'Le notifiche ora richiedono il suono.', 'Correzione di bug.'],
+    fr: ['Le radar couvre désormais 250 nm autour de chaque aéroport.', 'Les nouveaux vols sont détectés toutes les 5 minutes.', 'Les vols quittent la liste à l’atterrissage.', 'Les notifications demandent désormais le son.', 'Corrections de bugs.'],
+    es: ['El radar alcanza ahora 250 nm alrededor de cada aeropuerto.', 'Los vuelos nuevos se detectan cada 5 minutos.', 'Los vuelos salen de la lista al aterrizar.', 'Las notificaciones ahora piden sonido.', 'Corrección de errores.'],
+  },
 }
