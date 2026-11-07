@@ -72,7 +72,7 @@ async function discover(code: string, station?:RadarAirport, limit=20) {
     const db = await getDb(),ap=station||db.airports.get(code)
     if(!ap)return
     const iata=new Set(db.airlines?[...db.airlines.values()].map(a=>a.iata):[])
-    const aircraft=await live(`/point/${ap.lat}/${ap.lon}/140`),observedAt=Date.now(),deadline=observedAt+12000
+    const aircraft=await live(`/point/${ap.lat}/${ap.lon}/250`),observedAt=Date.now(),deadline=observedAt+12000
     const known=await knownFlights(),candidates:LiveAircraft[]=[],refreshed:HistoryRecord[]=[]
     for(const a of aircraft){
      const old=known.get(a.hex)

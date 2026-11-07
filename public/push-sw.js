@@ -27,7 +27,7 @@ self.addEventListener('push',event=>{
   const owner=await ownerStore('readonly',s=>s.get('owner'))
   if(!owner||owner.userId!==payload.userId||owner.subscriptionId!==payload.subscriptionId)return
   await self.registration.showNotification(payload.title.slice(0,180),{
-   body:payload.body.slice(0,300),tag:String(payload.tag||'myroster').slice(0,250),
+   body:payload.body.slice(0,300),silent:false,tag:String(payload.tag||'myroster').slice(0,250),
    icon:'/brand/myroster-icon-192-v223-fix.png',badge:'/brand/myroster-icon-192-v223-fix.png',
    data:{url:payload.url==='/trips'?'/trips':'/profile#notifications'},
   })

@@ -11,6 +11,7 @@ export async function GET(request: Request) {
   if (!secret || Buffer.byteLength(given) !== Buffer.byteLength(expected) || !timingSafeEqual(Buffer.from(given), Buffer.from(expected))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
-  const result = await discoverFlights(undefined, { background: true })
+  const light = new URL(request.url).searchParams.get('light') === '1'
+  const result = await discoverFlights(undefined, light ? { radar: false, stations: false, background: true } : { background: true })
   return NextResponse.json({ ...result, data: undefined, count: result.data.length })
 }

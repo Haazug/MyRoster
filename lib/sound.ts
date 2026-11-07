@@ -191,3 +191,15 @@ if (typeof document !== 'undefined') {
   })
   window.addEventListener('pagehide', () => CHANNELS.forEach((ch) => els[ch]?.pause()))
 }
+
+// iOS/iPadOS: after an interruption the context stays suspended until the next touch; wake it then
+if (typeof document !== 'undefined') {
+  const wake = () => {
+    if (unlocked && ctx && (ctx.state as string) !== 'running') {
+      ctx.resume().catch(() => {})
+      apply()
+    }
+  }
+  document.addEventListener('pointerdown', wake, { passive: true })
+  document.addEventListener('touchend', wake, { passive: true })
+}
