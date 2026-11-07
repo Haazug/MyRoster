@@ -82,8 +82,9 @@ export function currentFlights(flights: ResolvedFlight[], now = Date.now()) {
 
 // This bounds how long a lost position may remain an estimate; it is not a displayed ETA.
 export function radarExpiry(at: number, distanceNm?: number, speedKt?: number) {
+  if (distanceNm != null && Number.isFinite(distanceNm) && distanceNm >= 0 && distanceNm < 15) return at + 5 * 60_000
   if (distanceNm == null || !Number.isFinite(distanceNm) || distanceNm < 0 || !speedKt || speedKt < 100 || speedKt > 800) return at + 20 * 60_000
-  return Math.round(at + Math.min(18 * 3600_000, Math.max(20 * 60_000, distanceNm / speedKt * 3600_000 + 3600_000)))
+  return Math.round(at + Math.min(18 * 3600_000, Math.max(10 * 60_000, distanceNm / speedKt * 3600_000 + 10 * 60_000)))
 }
 
 export function displayFlightNumber(code:string,iata='',icao=''){

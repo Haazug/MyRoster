@@ -1,3 +1,8 @@
+## v2.3.5 — 2026-11-07
+
+Radar range 250 nm per airport; light global sweep every 5 minutes for new flights; flights expire at estimated landing or shortly after last sighting near the destination.
+Notifications request sound; What’s new notice on the home screen in the user language, always ending with bug fixes.
+
 ## v2.3.0 — 2026-11-03
 
 - Add official Star Alliance, SkyTeam and oneworld logos, and smooth page transitions.
