@@ -1,6 +1,6 @@
 ## v2.3.6 — 2026-11-07
 
-Your routes use the airline route layout; created routes draw a blue line on the globe and are kept; routes and flight numbers seen live are added to the airline page with their date.
+Your routes use the airline route layout; created routes draw a blue line on the globe and are kept; routes and flight numbers seen live are added to the airline page with their date. Created routes and seen routes sync with the account.
 
 ## v2.3.5 — 2026-11-07
 

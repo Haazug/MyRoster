@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { supabase } from "@/lib/supabase"
 
-const SYNCED = ["myroster.logs", "myroster.favourites", "myroster.bookings", "myroster.customRoutes", "myroster.favAirlines", "myroster.favAirports", "myroster.recents"]
+const SYNCED = ["myroster.logs", "myroster.favourites", "myroster.bookings", "myroster.customRoutes", "myroster.seenRoutes", "myroster.favAirlines", "myroster.favAirports", "myroster.recents"]
 
 const merge = (a: any[], b: any[]) => {
   const m = new Map<string, any>()
