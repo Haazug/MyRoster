@@ -1,3 +1,7 @@
+## v2.3.6 — 2026-11-07
+
+Your routes use the airline route layout; created routes draw a blue line on the globe and are kept; routes and flight numbers seen live are added to the airline page with their date.
+
 ## v2.3.5 — 2026-11-07
 
 Radar range 250 nm per airport; light global sweep every 5 minutes for new flights; flights expire at estimated landing or shortly after last sighting near the destination.

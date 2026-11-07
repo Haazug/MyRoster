@@ -19,6 +19,8 @@ import { fixName } from '@/lib/airline-names'
 import AirlineFav from '@/components/AirlineFav'
 import { useFavourites } from '@/lib/use-favourites'
 import { useFavs } from '@/lib/use-favs'
+import { useLocalStorage } from '@/lib/use-local-storage'
+import SeenRoutes from '@/components/SeenRoutes'
 
 const fetcher = (url: string) => fetch(url).then((response) => response.json())
 
@@ -38,15 +40,21 @@ function AirlineDetailPage() {
   const [tab, setTab] = useState<Tab>('all')
   const favR = useFavourites()
   const favAp = useFavs('airport')
+  const [customAll] = useLocalStorage<any[]>('myroster.customRoutes', [])
+  const [seenAll] = useLocalStorage<any[]>('myroster.seenRoutes', [])
+  const extraSig = [...customAll, ...seenAll].map((r: any) => `${r.id}${r.fromPt ? '+' : '-'}`).join('|')
 
   useEffect(() => {
     if (!data?.routes) return
     const routes = (data.routes as Route[])
       .filter((r) => r.fromAirport?.lat != null && r.toAirport?.lat != null)
       .map((r) => ({ from: r.fromAirport as Point, to: r.toAirport as Point }))
-    setView({ mode: 'airline', routes, hubs:data.hubs })
+    const key = String(data?.airline?.iata || id)
+    const extra = [...customAll, ...seenAll].filter((r: any) => r.airlineKey === key && Number.isFinite(r.fromPt?.lat) && Number.isFinite(r.toPt?.lat)).map((r: any) => ({ from: r.fromPt as Point, to: r.toPt as Point }))
+    setView({ mode: 'airline', routes: [...routes, ...extra], hubs:data.hubs })
     return () => setView({ mode: 'idle' })
-  }, [data, setView])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, setView, extraSig])
 
   const allRoutes = useMemo(() => {
     const seen = new Set<string>()
@@ -124,6 +132,7 @@ function AirlineDetailPage() {
       <AirlineAbout id={String(id)} />
       <AirlineFav />
       <CustomRoutes airlineKey={airline.iata || id} />
+      <SeenRoutes airlineKey={airline.iata || id} iata={airline.iata} icao={airline.icao} known={allRoutes.map((r) => [r.from, r.to].sort().join('-'))} />
 
       <p className="board-heading mt-7 text-xs">{tr('airlines.fromHubs')}</p>
       <div className="mt-3 flex gap-2 overflow-x-auto pb-1" role="tablist">

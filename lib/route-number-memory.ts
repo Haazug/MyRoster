@@ -1,6 +1,6 @@
 import {flightNumberPart,type ResolvedFlight} from './live-model'
 export type LearnedRouteNumber={id:string;number:string;airlineIata:string;airlineIcao:string;from:string;to:string;callsign:string;observedAt:number;aircraftType?:string;registration?:string}
-const retention=180*86400_000
+const retention=3650*86400_000
 export function rememberRouteNumbers(previous:LearnedRouteNumber[],updates:ResolvedFlight[],now=Date.now()){
  const entries=new Map(previous.filter(n=>now-n.observedAt<retention).map(n=>[n.id,n]))
  for(const f of updates){

@@ -8,6 +8,7 @@ import { useLocalStorage } from '@/lib/use-local-storage'
 import { matchAirline } from '@/lib/airline-aliases'
 import { fixName } from '@/lib/airline-names'
 import { AirlineLogo } from '@/components/AirlineLogo'
+import { pt, askPersist } from '@/lib/custom-route'
 
 const fetcher = (u: string) => fetch(u).then((r) => r.json())
 
@@ -38,7 +39,8 @@ export default function AirportAddRoute({ code }: { code: string }) {
       const d = await fetch(`/api/route/${key}/${code}-${o}`).then((r) => r.json())
       if (!d || d.error || !d.from || !d.to) setMsg('Airport not found.')
       else {
-        setAll((cur) => [...cur, { id: `${key}-${code}-${o}`, airlineKey: key, airlineName: fixName(airline.name), from: d.from.iata, to: d.to.iata, fromCity: d.from.city, toCity: d.to.city, distanceNm: d.distanceNm, flight: flight.trim().toUpperCase() || undefined }])
+        setAll((cur) => [...cur, { id: `${key}-${code}-${o}`, airlineKey: key, airlineName: fixName(airline.name), from: d.from.iata, to: d.to.iata, fromCity: d.from.city, toCity: d.to.city, distanceNm: d.distanceNm, flight: flight.trim().toUpperCase() || undefined, fromPt: pt(d.from), toPt: pt(d.to), fromCountry: d.from.country, toCountry: d.to.country }])
+        askPersist()
         setOther(''); setFlight(''); setAirline(null); setQ(''); setOpen(false)
       }
     } catch {

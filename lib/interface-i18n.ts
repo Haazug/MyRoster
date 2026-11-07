@@ -322,5 +322,8 @@ export const interfaceText: Record<string, readonly [string,string,string,string
  'trip.start':['Start now','Iniciar agora','Inizia ora','Commencer maintenant','Iniciar ahora'],
  'schedule.invalidTime':['Enter a valid departure time.','Introduz uma hora de saída válida.','Inserisci un’ora di partenza valida.','Saisissez une heure de départ valide.','Introduce una hora de salida válida.'],
  'fly.progress':['Route progress','Progresso da rota','Avanzamento della rotta','Progression de la liaison','Progreso de la ruta'],
+ "routes.mine":["Your routes","As tuas rotas","Le tue rotte","Vos liaisons","Tus rutas"],
+ "routes.seen":["Seen live","Vistas ao vivo","Viste in diretta","Vues en direct","Vistas en directo"],
+ "routes.seenOn":["Seen on {date}","Visto em {date}","Visto il {date}","Vu le {date}","Visto el {date}"],
 }
 export const interfaceLanguages = ['en','pt','it','fr','es'] as const
