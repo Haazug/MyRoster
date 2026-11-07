@@ -7,6 +7,11 @@ import useSWR from 'swr'
 import { Shuffle } from 'lucide-react'
 import { BoardingPass } from '@/components/BoardingPass'
 import { estimateBlockMinutes } from '@/lib/flight-time'
+import { AirlineLogo } from '@/components/AirlineLogo'
+import { matchAirline } from '@/lib/airline-aliases'
+import { fixName } from '@/lib/airline-names'
+import { useFavs } from '@/lib/use-favs'
+import { TOP_ICAO } from '@/lib/top-airlines'
 
 type A = { id: string; name: string; iata: string; icao: string; active: boolean; numRoutes: number }
 type Ap = { iata?: string; city?: string; name?: string; lat?: number; lon?: number }
@@ -29,6 +34,9 @@ export default function RandomPage() {
   const t=useT()
   const { data } = useSWR<A[]>('/api/airlines', fetcher)
   const list = Array.isArray(data) ? data : []
+  const favA = useFavs('airline')
+  const topList = TOP_ICAO.map((c) => list.filter((a) => a.icao === c).sort((x, y) => Number(y.active) - Number(x.active) || y.numRoutes - x.numRoutes)[0]).filter(Boolean) as A[]
+  const quick = [...list.filter((a) => favA.has(a.id)), ...topList.filter((a) => !favA.has(a.id))].slice(0, 10)
   const [q, setQ] = useState('')
   const [chosen, setChosen] = useState<A | null>(null)
   const [airport, setAirport] = useState('')
@@ -39,7 +47,7 @@ export default function RandomPage() {
   const [res, setRes] = useState<Result | null>(null)
 
   const nq = norm(q.trim())
-  const suggestions = nq && !chosen ? list.filter((a) => norm(`${a.name} ${a.iata} ${a.icao}`).includes(nq)).slice(0, 5) : []
+  const suggestions = nq && !chosen ? list.filter((a) => matchAirline(a, q.trim())).sort((x, y) => Number(favA.has(y.id)) - Number(favA.has(x.id)) || Number(y.active) - Number(x.active) || y.numRoutes - x.numRoutes).slice(0, 6) : []
 
   const generate = async () => {
     setBusy(true); setMsg(''); setRes(null)
@@ -79,11 +87,23 @@ export default function RandomPage() {
       <div className="mt-6 space-y-4">
         <div>
           <p className="mb-1 text-xs text-white/50">{t('live.airline')}</p>
-          <input className={input} placeholder={t('random.any')} value={chosen ? chosen.name : q} onChange={(e) => { setChosen(null); setQ(e.target.value) }} />
+          <input className={input} placeholder={t('random.any')} value={chosen ? fixName(chosen.name) : q} onChange={(e) => { setChosen(null); setQ(e.target.value) }} />
+          {!chosen && !q && quick.length > 0 && (
+            <div className="-mx-1 mt-2 flex gap-2 overflow-x-auto px-1 pb-1">
+              {quick.map((a) => (
+                <button key={a.id} type="button" onClick={() => { setChosen(a); setQ(fixName(a.name)) }} className="flex shrink-0 items-center gap-2 rounded-full border border-white/10 py-1 pl-1 pr-3 text-xs hover:border-[#1f88ff]/60">
+                  <AirlineLogo iata={a.iata} icao={a.icao} name={fixName(a.name)} size="sm" showText={false} />
+                  <span className="whitespace-nowrap">{fixName(a.name)}</span>
+                </button>
+              ))}
+            </div>
+          )}
           {suggestions.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-2">
               {suggestions.map((a) => (
-                <button key={a.id} onClick={() => { setChosen(a); setQ(a.name) }} className="rounded-lg border border-white/15 bg-white/10 px-2 py-1 text-xs">{a.name}</button>
+                <button key={a.id} type="button" onClick={() => { setChosen(a); setQ(fixName(a.name)) }} className="flex items-center gap-2 rounded-full border border-white/10 py-1 pl-1 pr-3 text-xs">
+                  <AirlineLogo iata={a.iata} icao={a.icao} name={fixName(a.name)} size="sm" showText={false} />{fixName(a.name)}
+                </button>
               ))}
             </div>
           )}
