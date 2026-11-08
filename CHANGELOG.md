@@ -1,3 +1,7 @@
+## v2.5.2 — 2026-11-08
+
+Copilot chat: typing animation, short Markdown sections, a button next to each suggested route (airline chooser when several operate it), called by typing “copilot” in Search, aware of routes the user adds. What’s new notice lists the 2.5.0 changes plus these.
+
 ## v2.5.1 — 2026-11-08
 
 Copilot: general context outside airline pages, called by typing “copilot” in Search, and aware of routes the user adds or sees live (distance-based time estimates). What’s new notice lists the 2.5.0 changes plus these.
