@@ -1,3 +1,7 @@
+## v2.5.1 — 2026-11-08
+
+Copilot: general context outside airline pages, called by typing “copilot” in Search, and aware of routes the user adds or sees live (distance-based time estimates). What’s new notice lists the 2.5.0 changes plus these.
+
 ## v2.5.0 — 2026-11-08
 
 Random flight uses hours with exact (±5–30 min) or approximate (±35 min–1 h) matching; airline pages filter routes by flight time; free multi-provider Copilot chat (Gemini, Groq, Cerebras, OpenRouter fallback chain, server-side keys).

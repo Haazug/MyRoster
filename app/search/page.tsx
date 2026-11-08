@@ -61,6 +61,7 @@ export default function SearchPage() {
 
       {!t && <Link href="/live" className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm text-white/65"><span className="size-1.5 rounded-full bg-green-400" />{tr('live.title')} · {tr('live.subtitle')}</Link>}
       {isLive && <LiveFlights key={routeKind} initialRouteType={routeKind} />}
+      {/^copilot\b/i.test(t) && <button type="button" onClick={() => window.dispatchEvent(new CustomEvent('myroster:copilot', { detail: { text: t.replace(/^copilot[\s,:;-]*/i, '') } }))} className="mt-4 flex min-h-12 w-full items-center justify-center rounded-2xl bg-white text-sm font-semibold text-black">{tr('copilot.ask')}</button>}
       {!t && (
         <>
           {(favA.items.length > 0 || favP.items.length > 0) && (

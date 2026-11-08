@@ -339,5 +339,6 @@ export const interfaceText: Record<string, readonly [string,string,string,string
  "copilot.unavailable":["The copilot is unavailable right now. Try again later.", "O copiloto está indisponível agora. Tenta mais tarde.", "Il copilota non è disponibile ora. Riprova più tardi.", "Le copilote est indisponible. Réessayez plus tard.", "El copiloto no está disponible ahora. Inténtalo más tarde."],
  "copilot.limit":["Too many messages. Wait a few minutes.", "Demasiadas mensagens. Espera alguns minutos.", "Troppi messaggi. Attendi qualche minuto.", "Trop de messages. Attendez quelques minutes.", "Demasiados mensajes. Espera unos minutos."],
  "copilot.privacy":["AI can make mistakes. Do not share personal data.", "A IA pode errar. Não partilhes dados pessoais.", "L’IA può sbagliare. Non condividere dati personali.", "L’IA peut se tromper. Ne partagez pas de données personnelles.", "La IA puede equivocarse. No compartas datos personales."],
+ "copilot.ask":["Ask the Copilot", "Perguntar ao Copiloto", "Chiedi al Copilota", "Demander au Copilote", "Preguntar al Copiloto"],
 }
 export const interfaceLanguages = ['en','pt','it','fr','es'] as const
