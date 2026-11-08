@@ -19,6 +19,8 @@ import { fixName } from '@/lib/airline-names'
 import AirlineFav from '@/components/AirlineFav'
 import { useFavourites } from '@/lib/use-favourites'
 import { useFavs } from '@/lib/use-favs'
+import RouteTimeFilter from '@/components/RouteTimeFilter'
+import { matchesTime, parseHours } from '@/lib/time-match'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import SeenRoutes from '@/components/SeenRoutes'
 
@@ -38,6 +40,8 @@ function AirlineDetailPage() {
   const setView = useMapStore((s) => s.setView)
   const [q, setQ] = usePageQuery()
   const [tab, setTab] = useState<Tab>('all')
+  const [hours, setHours] = useState('')
+  const [precise, setPrecise] = useState(true)
   const favR = useFavourites()
   const favAp = useFavs('airport')
   const [customAll] = useLocalStorage<any[]>('myroster.customRoutes', [])
@@ -73,13 +77,14 @@ function AirlineDetailPage() {
 
   const nq = q.trim().toLowerCase()
   const filtered = useMemo(() => {
-    const byTab = tab === 'all' ? allRoutes : allRoutes.filter((r) => (tab === 'domestic') === isDomestic(r))
+    const byTab0 = tab === 'all' ? allRoutes : allRoutes.filter((r) => (tab === 'domestic') === isDomestic(r))
+    const byTab = parseHours(hours) > 0 ? byTab0.filter((r) => matchesTime(r as any, parseHours(hours), precise)) : byTab0
     if (!nq) return byTab
     return byTab.filter((r) =>
       [r.from, r.to, r.fromAirport?.city, r.toAirport?.city, r.fromAirport?.name, r.toAirport?.name, r.fromAirport?.country, r.toAirport?.country]
         .filter(Boolean).join(' ').toLowerCase().includes(nq)
     )
-  }, [allRoutes, tab, nq])
+  }, [allRoutes, tab, nq, hours, precise])
 
   const airKey = String(data?.airline?.iata || id)
   const routes = useMemo(() => {
@@ -149,6 +154,7 @@ function AirlineDetailPage() {
         ))}
       </div>
 
+      <RouteTimeFilter hours={hours} onHours={setHours} precise={precise} onPrecise={setPrecise} />
       <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={tr('airlines.routeSearch')} className="mt-4 min-h-12 w-full rounded-2xl border border-white/10 bg-white/[.06] px-4 outline-none placeholder:text-white/35 focus:border-[#1f88ff]" />
       {(nq || tab !== 'all') && <p className="mt-3 text-xs text-white/40">{routes.length} of {counts.all} routes</p>}
 

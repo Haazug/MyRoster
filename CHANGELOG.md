@@ -1,3 +1,7 @@
+## v2.5.0 — 2026-11-08
+
+Random flight uses hours with exact (±5–30 min) or approximate (±35 min–1 h) matching; airline pages filter routes by flight time; free multi-provider Copilot chat (Gemini, Groq, Cerebras, OpenRouter fallback chain, server-side keys).
+
 ## v2.4.0 — 2026-11-07
 
 Random flight: airline picker with logos, favourites and top airlines. What’s new notice now lists every change since 2.3.5.
